@@ -18,16 +18,32 @@
 
 ## ルーチン設定
 
-- 設定状況：未設定
-- 実行時刻：（未設定）
-- 登録先：（未設定）
-- 登録日：（未設定）
-- 注意：ローカルルーチンはPCとClaude Codeが起動している間だけ動きます
+- 設定状況：設定済み
+- 実行時刻：毎日 07:00（JST）
+- 登録先：Claude Code Remote のRoutine機能（trigger_id: trig_016EEkQPMe6Zd5FbqDxcKbGi）。このセッションに直接resumeする形で毎朝実行
+- 登録日：2026-07-30
+- 注意：この環境のセッション・コンテナはアイドル時に破棄されるため、rakuten-room/のデータはGitリポジトリ（har1ne9nja-cpu/Rakuten、ブランチclaude/rakuten-planner-launch-lqdrwt）で永続化している。ルーチン実行時は必ずgit pullしてから作業し、完了後はgit pushする運用
 
 ### ルーチンの指示文（登録した内容）
 
 ```
-（未登録）
+「楽天プランナー」スキル（rakuten-daily-post-planner）を使って、今日の楽天ROOM投稿プランを最後まで作成してください。質問はせず、保存済みデータと実ブラウズで得られる情報だけで完走すること。
+
+【重要：データの保存場所】
+このセッションはGitHubリポジトリ har1ne9nja-cpu/Rakuten のブランチ claude/rakuten-planner-launch-lqdrwt で作業しています。アカウント設計・固定候補リスト・投稿ログは `rakuten-room/` ディレクトリ（リポジトリのルート直下）に保存されています。ホームディレクトリの `~/rakuten-room/` ではありません。
+
+作業前に必ず以下を行うこと：
+1. 作業ディレクトリが無い、または古い場合は `git fetch origin claude/rakuten-planner-launch-lqdrwt && git checkout claude/rakuten-planner-launch-lqdrwt && git pull origin claude/rakuten-planner-launch-lqdrwt` 等で最新化する（存在しなければそのブランチを新規クローンする）。
+
+【実行内容】
+1. `rakuten-room/account.md`・`rakuten-room/products.md`・`rakuten-room/post-drafts.md`・`rakuten-room/posts-log.md`・`rakuten-room/schedule.md` を読み込む。
+2. `posts-log.md` の直近の計画・実績・反応を確認し、固定候補のローテーション（同一商品は最終投稿日から1〜2週間空ける）で本日の本命・関連・収益拡張の商品を選ぶ。
+3. 可能であれば実ブラウズ（WebFetch/WebSearch）で加熱状態の継続・クーポン期限・レビュー新着を再確認する（`products.md`の確認日が7日以上前の商品は特に）。アクセスできない場合はその旨を明記し、無理に創作しない。
+4. 役割（入口/関連/収益拡張/予告）・投稿文（`post-drafts.md`の作り置きがあれば時事だけ微調整して使う。無ければ新規作成しコンプラチェックの上で`post-drafts.md`にも追記）・推奨投稿時刻（21:00〜22:00固定）・回遊セット（次に繋げる商品）まで言い切る。
+5. `posts-log.md` に本日の計画行を追記し、`products.md`の確認日・最終投稿日を更新する。
+6. 変更を `git add` → `git commit` → `git push -u origin claude/rakuten-planner-launch-lqdrwt` で保存する。
+
+最後にユーザー（このセッションの持ち主）へ、今日の本命商品・役割・投稿予定時刻・投稿文の要点を3〜5行で簡潔に報告してください。詳細はファイルを見れば分かるので、チャットでは長々と書かないこと。
 ```
 
 ## 直近のセール日程メモ
